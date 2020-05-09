@@ -1,60 +1,56 @@
 <template>
-  <div id="app">
-    <img src="./assets/logo.png">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul>
-  </div>
+<div id="app" class="small-container">
+<h1>Employees</h1>
+ <div v-for="currencies in data">
+{{ currencies.code}}
+{{ currencies.rate || currencydecimal}}
+ </div>
+<!-- <employee-table :employees="employees"/> -->
+
+</div>
+
 </template>
 
 <script>
+import axios from 'axios';
+//import EmployeeTable from './components/Currency.vue'
+
 export default {
   name: 'app',
-  data () {
+  data() {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      data: []
     }
+  },
+
+components: {
+ // EmployeeTable,
+},
+
+
+filters: {
+  currencydecimal (value) {
+    return value.toFixed(2)
   }
+},
+ mounted() {
+   axios
+     .get('https://api.coindesk.com/v1/bpi/currentprice.json')
+     .then(response => (this.data = response.data.bpi))
+ },
+
+
 }
 </script>
 
-<style lang="scss">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<style>
+
+button {
+   background: #009435;
+    border: 1px solid #009435;
 }
 
-h1, h2 {
-  font-weight: normal;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #42b983;
-}
+  .small-container {
+    max-width: 680px;
+  }
 </style>
